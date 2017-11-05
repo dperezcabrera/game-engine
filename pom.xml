@@ -29,7 +29,7 @@
  
     <scm>
         <url>https://github.com/dperezcabrera/game-engine</url>
-        <connection>scm:git:ssh://github.com/dperezcabrera/game-engine</connection>
+        <connection>scm:git:ssh://github.com/dperezcabrera/game-engine.git</connection>
         <developerConnection>scm:git:ssh://github.com/dperezcabrera/game-engine</developerConnection>
     </scm>
 
