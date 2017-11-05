@@ -30,7 +30,7 @@ public class OutputConnector implements IOConnector {
     private OutputStream outStream;
     private boolean closed = false;
 
-    public OutputConnector(OutputStream outStream) throws IOException {
+    public OutputConnector(OutputStream outStream) {
         this.outStream = outStream;
     }
 

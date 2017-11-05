@@ -29,8 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -38,8 +36,8 @@ import lombok.extern.slf4j.Slf4j;
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
 @Slf4j
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class Utilities {
+public enum Utilities {
+    ;// without instances
 
     public static final String MIN_VALUE_ERR_MSG = "The argument {0} can not be less than <{1}> and it is <{2}>.";
     public static final String MAX_VALUE_ERR_MSG = "The argument {0} can not be greather than <{1}> and it is <{2}>.";

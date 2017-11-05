@@ -18,8 +18,6 @@ package com.github.dperezcabrera.ge.remote;
 import com.github.dperezcabrera.ge.io.GameEvent;
 import java.util.Map;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,9 +26,9 @@ import lombok.extern.slf4j.Slf4j;
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
 @Slf4j
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class AuthenticationLoginPassword {
-
+public enum AuthenticationLoginPassword {
+    ;// without instances
+        
     private static final String ACK_COMMAND = "Ack";
     private static final String AUTH_COMMAND = "Auth";
     private static final String ERROR_COMMAND = "Error";

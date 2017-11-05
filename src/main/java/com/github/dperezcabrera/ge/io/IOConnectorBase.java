@@ -121,6 +121,7 @@ public class IOConnectorBase implements IOConnector {
                 } catch (InterruptedException ex) {
                     // interrupted
                     log.debug("Interrupted read " + timeout, ex);
+                    Thread.currentThread().interrupt();
                 }
             }
             if (t.isAlive()) {

@@ -67,7 +67,7 @@ public class GameControllerBase<P, E extends Enum, M extends GameContext<P>> imp
             context.setProperties(new Properties(properties));
             return stateMachine.startInstance(context).execute().getScores();
         } finally {
-            executors.forEach(e -> e.shutdown());
+            executors.forEach(ExecutorService::shutdown);
         }
     }
 }
