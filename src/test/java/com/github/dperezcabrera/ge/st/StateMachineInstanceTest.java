@@ -19,7 +19,7 @@ import com.github.dperezcabrera.ge.GameContext;
 import com.github.dperezcabrera.ge.annotations.Timeout;
 import java.util.Properties;
 import java.util.concurrent.Executors;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.dperezcabrera.ge.test.TestUtility.given;
 import static com.github.dperezcabrera.ge.test.TestUtility.when;
@@ -28,7 +28,7 @@ import static com.googlecode.catchexception.apis.BDDCatchException.when;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 
 /**

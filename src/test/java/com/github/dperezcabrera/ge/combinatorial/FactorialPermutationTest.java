@@ -19,58 +19,41 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-@RunWith(value = Parameterized.class)
 public class FactorialPermutationTest {
 
-    private final int items;
-    private final int combinationsExpected;
-
-    public FactorialPermutationTest(int items, int combinationsExpected) {
-        this.items = items;
-        this.combinationsExpected = combinationsExpected;
-    }
-
-    @Parameters
-    public static Collection<Object[]> data() {
+    private static Collection<Object[]> data() {
         Object data[][] = {
             {1, 1},
             {2, 2},
             {3, 6},
             {4, 24},
-            {5, 120}, 
-        };
+            {5, 120},};
         return Arrays.asList(data);
     }
 
-    /**
-     * Test of combinations method, of class FactorialPermutation.
-     */
-    @Test
-    public void testCombinations() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testCombinations(int items, int combinationsExpected) {
         long result = FactorialPermutation.combinations(items);
         assertEquals(combinationsExpected, result);
     }
 
-    /**
-     * Invariant test of class FactorialPermutation.
-     */
-    @Test
-    public void integrationTest() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void integrationTest(int items, int combinationsExpected) {
         FactorialPermutation c = new FactorialPermutation(items);
         int sizeResult = c.size();
         assertEquals("Size assert, expected: <" + items + "> and result: <" + sizeResult + ">", items, sizeResult);
@@ -98,7 +81,7 @@ public class FactorialPermutationTest {
         int expTemp[] = new int[items];
         Arrays.fill(temp, -1);
         Arrays.fill(expTemp, -1);
-        
+
         // ignore next
         c.next(temp);
         assertArrayEquals("next after last assert", temp, expTemp);

@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 
 import static com.github.dperezcabrera.ge.test.TestUtility.givenMock;

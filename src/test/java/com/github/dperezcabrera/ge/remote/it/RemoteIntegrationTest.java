@@ -39,9 +39,10 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  *
@@ -63,7 +64,7 @@ public class RemoteIntegrationTest {
         return StateMachineDefinitionBuilder.StateTriggerBuilder.<State, Model>state(state);
     }
 
-    @Before
+    @BeforeEach
     public void prepareTest() {
         properties = new Properties();
         properties.setProperty("timeout.getRandom", "500");

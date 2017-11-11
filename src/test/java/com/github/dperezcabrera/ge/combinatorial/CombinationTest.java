@@ -17,7 +17,7 @@ package com.github.dperezcabrera.ge.combinatorial;
 
 import java.util.Arrays;
 import java.util.Collection;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -31,29 +31,19 @@ import static org.assertj.core.api.BDDAssertions.then;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-@RunWith(value = Parameterized.class)
 public class CombinationTest {
 
-    private final int subItems;
-    private final int items;
-    private final int combinationsExpected;
-
     Combination instance;
-    int [][] allCombinations;
-    
-    public CombinationTest(int subItems, int items, int combinationsExpected) {
-        this.subItems = subItems;
-        this.items = items;
-        this.combinationsExpected = combinationsExpected;
-    }
+    int[][] allCombinations;
 
-    @Parameters
-    public static Collection<Object[]> data() {
+    private static Collection<Object[]> data() {
         Object data[][] = {
             {1, 1, 1},
             {1, 2, 2},
@@ -72,15 +62,17 @@ public class CombinationTest {
         return Arrays.asList(data);
     }
 
-    @Test
-    public void testCombinationsStatic() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testCombinationsStatic(int subItems, int items, int combinationsExpected) {
         when(() -> Combination.combinations(subItems, items));
 
         then(returnedObject(long.class)).isEqualTo(combinationsExpected);
     }
 
-    @Test
-    public void testSize() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testSize(int subItems, int items, int combinationsExpected) {
         given(() -> instance = new Combination(subItems, items));
 
         when(() -> instance.size());
@@ -88,8 +80,9 @@ public class CombinationTest {
         then(returnedObject(int.class)).isEqualTo(subItems);
     }
 
-    @Test
-    public void testCombinations() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testCombinations(int subItems, int items, int combinationsExpected) {
         given(() -> instance = new Combination(subItems, items));
 
         when(() -> instance.combinations());
@@ -97,15 +90,17 @@ public class CombinationTest {
         then(returnedObject(long.class)).isEqualTo(combinationsExpected);
     }
 
-    @Test
-    public void tesHasNextFirst() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void tesHasNextFirst(int subItems, int items, int combinationsExpected) {
         when(() -> new Combination(subItems, items));
 
         then(returnedObject(Combination.class).hasNext()).isTrue();
     }
 
-    @Test
-    public void testHasNextPreLast() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testHasNextPreLast(int subItems, int items, int combinationsExpected) {
         given(() -> instance = new Combination(subItems, items));
 
         when(() -> {
@@ -118,8 +113,9 @@ public class CombinationTest {
         then(instance.hasNext()).isTrue();
     }
 
-    @Test
-    public void testHasNextLast() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testHasNextLast(int subItems, int items, int combinationsExpected) {
         given(() -> instance = new Combination(subItems, items));
 
         when(() -> {
@@ -132,8 +128,9 @@ public class CombinationTest {
         then(instance.hasNext()).isFalse();
     }
 
-    @Test
-    public void testHasNextAfterClear() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testHasNextAfterClear(int subItems, int items, int combinationsExpected) {
         given(() -> instance = new Combination(subItems, items));
 
         when(() -> instance.clear());
@@ -141,8 +138,9 @@ public class CombinationTest {
         then(instance.hasNext()).isTrue();
     }
 
-    @Test
-    public void testHasNextAfterClearWithNext() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testHasNextAfterClearWithNext(int subItems, int items, int combinationsExpected) {
         given(() -> instance = new Combination(subItems, items));
 
         when(() -> {
@@ -153,8 +151,9 @@ public class CombinationTest {
         then(instance.hasNext()).isTrue();
     }
 
-    @Test
-    public void testHasNextAfterFullLoopClear() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testHasNextAfterFullLoopClear(int subItems, int items, int combinationsExpected) {
         given(() -> instance = new Combination(subItems, items));
 
         when(() -> {
@@ -168,8 +167,9 @@ public class CombinationTest {
         then(instance.hasNext()).isTrue();
     }
 
-    @Test
-    public void testNextItemsRange() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testNextItemsRange(int subItems, int items, int combinationsExpected) {
         given(() -> instance = new Combination(subItems, items));
 
         when(() -> {
@@ -178,7 +178,7 @@ public class CombinationTest {
                 instance.next(allCombinations[i] = new int[subItems]);
             }
         });
-        
+
         // Sort and range assert
         thenCheck(() -> {
             for (int i = 0; i < combinationsExpected; i++) {
@@ -190,17 +190,18 @@ public class CombinationTest {
         });
     }
 
-    @Test
-    public void testNextDontRepeat() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testNextDontRepeat(int subItems, int items, int combinationsExpected) {
         given(() -> instance = new Combination(subItems, items));
-        
+
         when(() -> {
             allCombinations = new int[combinationsExpected][];
             for (int i = 0; i < combinationsExpected; i++) {
                 instance.next(allCombinations[i] = new int[subItems]);
             }
         });
-        
+
         // No repeat previous combinations assert
         thenCheck(() -> {
             for (int i = 0; i < combinationsExpected; i++) {
@@ -211,10 +212,11 @@ public class CombinationTest {
         });
     }
 
-    @Test
-    public void testNextIgnored() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testNextIgnored(int subItems, int items, int combinationsExpected) {
         given(() -> instance = new Combination(subItems, items));
-        
+
         when(() -> {
             int indexes[] = new int[subItems];
             for (int i = 0; i < combinationsExpected; i++) {
@@ -228,8 +230,9 @@ public class CombinationTest {
         then(returnedObject(int[].class)).containsOnly(-1);
     }
 
-    @Test
-    public void testNextAfterClear() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testNextAfterClear(int subItems, int items, int combinationsExpected) {
         given(() -> instance = new Combination(subItems, items));
         given(() -> {
             allCombinations = new int[combinationsExpected][];
@@ -237,17 +240,17 @@ public class CombinationTest {
                 instance.next(allCombinations[i] = new int[subItems]);
             }
         });
-        
+
         // Check equals results for the same step
         when(() -> {
             instance.clear();
-            int [][] combinations = new int[combinationsExpected][];
+            int[][] combinations = new int[combinationsExpected][];
             for (int i = 0; i < combinationsExpected; i++) {
                 instance.next(combinations[i] = new int[subItems]);
             }
             return combinations;
         });
-        
+
         then(returnedObject()).isEqualTo(allCombinations);
     }
 }

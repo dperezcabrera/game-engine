@@ -15,7 +15,7 @@
  */
 package com.github.dperezcabrera.ge.combinatorial;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.dperezcabrera.ge.test.TestUtility.given;
 import static com.github.dperezcabrera.ge.test.TestUtility.returnedObject;
@@ -29,9 +29,9 @@ import static org.assertj.core.api.BDDAssertions.then;
  */
 public class CombinationContructorTest {
 
-    Combination instance;
-    int subItems;
-    int items;
+    private Combination instance;
+    private int subItems;
+    private int items;
 
     @Test
     public void testSize() {

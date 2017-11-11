@@ -22,7 +22,7 @@ import com.github.dperezcabrera.ge.util.Builder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.dperezcabrera.ge.test.TestUtility.given;
 import static com.github.dperezcabrera.ge.test.TestUtility.returnedObject;
