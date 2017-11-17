@@ -122,7 +122,6 @@
         </dependency>
     </dependencies>
     
-    
     <build>
         <plugins>
             <plugin>
@@ -140,6 +139,11 @@
                         <version>${junit.platform.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>com.versioneye</groupId>
+                <artifactId>versioneye-maven-plugin</artifactId>
+                <version>3.11.4</version>
             </plugin>
         </plugins>
     </build>
