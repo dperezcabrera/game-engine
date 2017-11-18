@@ -7,7 +7,7 @@
     <packaging>jar</packaging>
     
     <name>GameEngine</name>
-    
+        
     <description></description>
     
     <url>http://github.com/dperezcabrera/game-engine</url>
@@ -42,6 +42,14 @@
         <system>Travis</system>
         <url>https://travis-ci.org/dperezcabrera/game-engine/</url>
     </ciManagement>
+    
+    <distributionManagement>
+        <repository>
+            <id>bintray-dperezcabrera-public</id>
+            <name>dperezcabrera-public</name>
+            <url>https://api.bintray.com/maven/dperezcabrera/public/game-engine/;publish=1</url>
+        </repository>
+    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -139,6 +147,19 @@
                         <version>${junit.platform.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>com.versioneye</groupId>
