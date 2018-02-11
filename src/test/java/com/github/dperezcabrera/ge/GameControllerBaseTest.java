@@ -22,13 +22,10 @@ import com.github.dperezcabrera.ge.util.Builder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
-import static com.github.dperezcabrera.ge.test.TestUtility.given;
-import static com.github.dperezcabrera.ge.test.TestUtility.returnedObject;
-import static com.github.dperezcabrera.ge.test.TestUtility.when;
-import static com.googlecode.catchexception.apis.BDDCatchException.caughtException;
-import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -53,13 +50,10 @@ public class GameControllerBaseTest {
     public void testConstructorError() {
         given(propertiesMock.getProperty("timeout.getRandom")).willReturn("..");
         given(propertiesMock.containsKey("timeout.getRandom")).willReturn(true);
-        given(() -> instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, () -> new Model(), propertiesMock, connectorAdapterFactoryMock));
         
-        when(() -> instance.play(map("a", playerStrategyMock)));
-
-        then(caughtException())
-                .isInstanceOf(GameException.class)
-                .hasMessage("Property timeout error");
+        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, () -> new Model(), propertiesMock, connectorAdapterFactoryMock);
+        
+        assertThrows(GameException.class, () -> instance.play(map("a", playerStrategyMock)) , "Property timeout error");
     }
 
     @Test
@@ -70,13 +64,10 @@ public class GameControllerBaseTest {
         given(stateMachineMock.startInstance(modelMock)).willReturn(stateMachineInstanceMock);
         given(stateMachineInstanceMock.execute()).willReturn(modelMock);
         given(modelMock.getScores()).willReturn(expectResultMock);
-        given(() -> instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock, connectorAdapterFactoryMock));
+        
+        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock, connectorAdapterFactoryMock);
 
-        when(() -> instance.play(map(null, playerStrategyMock)));
-
-        then(caughtException())
-                .isInstanceOf(NullPointerException.class);
-
+        assertThrows(NullPointerException.class, () -> instance.play(map(null, playerStrategyMock)));
     }
 
     @Test
@@ -87,13 +78,10 @@ public class GameControllerBaseTest {
         given(stateMachineMock.startInstance(modelMock)).willReturn(stateMachineInstanceMock);
         given(stateMachineInstanceMock.execute()).willReturn(modelMock);
         given(modelMock.getScores()).willReturn(expectResultMock);
-        given(() -> instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock, connectorAdapterFactoryMock));
+        
+        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock, connectorAdapterFactoryMock);
 
-        when(() -> instance.play(null));
-
-        then(caughtException())
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("The argument players can not be null or empty.");
+        assertThrows(IllegalArgumentException.class, () -> instance.play(null), "The argument players can not be null or empty.");
     }
 
     @Test
@@ -104,13 +92,9 @@ public class GameControllerBaseTest {
         given(stateMachineMock.startInstance(modelMock)).willReturn(stateMachineInstanceMock);
         given(stateMachineInstanceMock.execute()).willReturn(modelMock);
         given(modelMock.getScores()).willReturn(expectResultMock);
-        given(() -> instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock, connectorAdapterFactoryMock));
+        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock, connectorAdapterFactoryMock);
 
-        when(() -> instance.play(new HashMap<>()));
-
-        then(caughtException())
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("The argument players can not be null or empty.");
+        assertThrows(IllegalArgumentException.class, () -> instance.play(new HashMap<>()), "The argument players can not be null or empty.");
     }
 
     @Test
@@ -121,12 +105,9 @@ public class GameControllerBaseTest {
         given(stateMachineMock.startInstance(modelMock)).willReturn(stateMachineInstanceMock);
         given(stateMachineInstanceMock.execute()).willReturn(modelMock);
         given(modelMock.getScores()).willReturn(expectResultMock);
-        given(() -> instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock, connectorAdapterFactoryMock));
+        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock, connectorAdapterFactoryMock);
 
-        when(() -> instance.play(map("player", null)));
-
-        then(caughtException())
-                .isInstanceOf(NullPointerException.class);
+        assertThrows(NullPointerException.class, () -> instance.play(map("player", null)));
     }
 
     @Test
@@ -137,11 +118,11 @@ public class GameControllerBaseTest {
         given(stateMachineMock.startInstance(modelMock)).willReturn(stateMachineInstanceMock);
         given(stateMachineInstanceMock.execute()).willReturn(modelMock);
         given(modelMock.getScores()).willReturn(expectResultMock);
-        given(() -> instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock, connectorAdapterFactoryMock));
+        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock, connectorAdapterFactoryMock);
 
-        when(() -> instance.play(map("player", playerStrategyMock)));
+        Map<String, Double> result = instance.play(map("player", playerStrategyMock));
 
-        then(returnedObject()).isEqualToComparingFieldByField(expectResultMock);
+        assertEquals(expectResultMock, result);
     }
 
     private static <K, V> Map<K, V> map(K key, V value) {

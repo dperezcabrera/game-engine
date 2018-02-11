@@ -30,8 +30,6 @@ import java.util.Map;
 import java.util.Properties;
 import org.junit.jupiter.api.Test;
 
-import static com.github.dperezcabrera.ge.test.TestUtility.given;
-import static com.github.dperezcabrera.ge.test.TestUtility.when;
 import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -46,7 +44,7 @@ public class ExceptionsIntegrationTest {
 
     StateMachineDefinition<State, Model> stateMachine;
     StateTrigger<Model> trigger0 = null;
-    
+
     StateTrigger<Model> trigger1Mock = mock(StateTrigger.class);
     StateTrigger<Model> trigger2Mock = mock(StateTrigger.class);
     PlayerStrategy player0Mock = mock(PlayerStrategy.class);
@@ -57,7 +55,7 @@ public class ExceptionsIntegrationTest {
     @Test
     public synchronized void testMain() throws InterruptedException {
 
-        given(() -> trigger0 = c -> {
+        trigger0 = c -> {
             c.getPlayersConnector().forEach((n, p) -> {
                 if ("0".equals(n)) {
                     p.getRandom(0L, 0);
@@ -69,14 +67,15 @@ public class ExceptionsIntegrationTest {
                     }
                 }
             });
-        });
+        };
         given(propertiesMock.getProperty("timeout.getRandom")).willReturn("500");
         given(propertiesMock.containsKey("timeout.getRandom")).willReturn(true);
-        given(() -> stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.A)
+        stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.A)
                 .add(state(State.A).trigger(trigger0).transition(State.B))
                 .add(state(State.B).transition(State.D, c -> c.getScores() != null).transition(State.C))
                 .add(state(State.C).trigger(trigger2Mock).transition(State.D))
-                .add(state(State.D).trigger(trigger1Mock)).build());
+                .add(state(State.D).trigger(trigger1Mock))
+                .build();
 
         given(player0Mock.getRandom(0L, 0)).willReturn(0);
         given(player1Mock.getRandom(0L, 1)).willThrow(RuntimeException.class);
@@ -87,16 +86,14 @@ public class ExceptionsIntegrationTest {
             return 1;
         });
 
-        when(() -> {
-            GameController gc = new GameControllerBase(PlayerStrategy.class, stateMachine, () -> new Model(), propertiesMock, new ConnectorAdapterBuilderBase());
-            Map<String, PlayerStrategy> players = new HashMap<>(3);
-            players.put("0", player0Mock);
-            players.put("1", player1Mock);
-            players.put("2", player2Mock);
-            gc.play(players);
-
-            wait(1000);
-        });
+        //when
+        GameController gc = new GameControllerBase(PlayerStrategy.class, stateMachine, () -> new Model(), propertiesMock, new ConnectorAdapterBuilderBase());
+        Map<String, PlayerStrategy> players = new HashMap<>(3);
+        players.put("0", player0Mock);
+        players.put("1", player1Mock);
+        players.put("2", player2Mock);
+        gc.play(players);
+        wait(1000);
 
         then(player0Mock).should(times(1)).getRandom(0L, 0);
         then(player1Mock).should(times(1)).getRandom(0L, 1);

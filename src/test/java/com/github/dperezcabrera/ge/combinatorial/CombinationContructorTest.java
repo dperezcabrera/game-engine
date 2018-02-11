@@ -17,11 +17,8 @@ package com.github.dperezcabrera.ge.combinatorial;
 
 import org.junit.jupiter.api.Test;
 
-import static com.github.dperezcabrera.ge.test.TestUtility.given;
-import static com.github.dperezcabrera.ge.test.TestUtility.returnedObject;
-import static com.github.dperezcabrera.ge.test.TestUtility.when;
-import static com.googlecode.catchexception.apis.BDDCatchException.caughtException;
-import static org.assertj.core.api.BDDAssertions.then;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  *
@@ -30,30 +27,28 @@ import static org.assertj.core.api.BDDAssertions.then;
 public class CombinationContructorTest {
 
     private Combination instance;
-    private int subItems;
-    private int items;
 
     @Test
     public void testSize() {
-        given(() -> subItems = 2);
-        given(() -> items = 4);
-        given(() -> instance = new Combination(subItems, items));
+        int subItems = 2;
+        int items = 4;
+        instance = new Combination(subItems, items);
 
-        when(() -> instance.size());
+        int result = instance.size();
 
-        then(returnedObject()).isEqualTo(subItems);
+        assertEquals(subItems, result);
     }
     
     @Test
     public void testCombinations() {
         long expectCombinations = 6L;
-        given(() -> subItems = 2);
-        given(() -> items = 4);
-        given(() -> instance = new Combination(subItems, items));
+        int subItems = 2;
+        int items = 4;
+        instance = new Combination(subItems, items);
 
-        when(() -> instance.combinations());
+        long result = instance.combinations();
 
-        then(returnedObject()).isEqualTo(expectCombinations);
+        assertEquals(expectCombinations, result);
     }
 
     /**
@@ -61,13 +56,10 @@ public class CombinationContructorTest {
      */
     @Test
     public void testContructorSubItemError() {
-        given(() -> subItems = 0);
-        given(() -> items = 1);
+        int subItems = 0;
+        int items = 1;
         
-        when(() -> new Combination(subItems, items));
-
-        then(caughtException())
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThrows(IllegalArgumentException.class, () -> new Combination(subItems, items));
     }
 
     /**
@@ -75,12 +67,9 @@ public class CombinationContructorTest {
      */
     @Test
     public void testContructorItemError() {
-        given(() -> subItems = 5);
-        given(() -> items = 1);
+        int subItems = 5;
+        int items = 2;
 
-        when(() -> new Combination(subItems, items));
-
-        then(caughtException())
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThrows(IllegalArgumentException.class, () -> new Combination(subItems, items));
     }
 }

@@ -29,11 +29,9 @@ import java.util.Map;
 import java.util.Properties;
 import org.junit.jupiter.api.Test;
 
-import static com.github.dperezcabrera.ge.test.TestUtility.given;
-import static com.github.dperezcabrera.ge.test.TestUtility.when;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 
@@ -66,23 +64,20 @@ public class StateMachineIntegrationTest {
             }
             return 1;
         });
-        given(() -> stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.A)
+        stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.A)
                 .add(state(State.A).trigger(trigger0Mock).transition(State.B))
                 .add(state(State.B).transition(State.D, c -> c.getScores() != null).transition(State.C))
-                .add(state(State.C).trigger(trigger2Mock).transition(State.D)).build()
-        );
+                .add(state(State.C).trigger(trigger2Mock).transition(State.D))
+                .build();
 
-        when(() -> {
-            GameController gc = new GameControllerBase(PlayerStrategy.class, stateMachine, () -> new Model(), propertiesMock, new ConnectorAdapterBuilderBase());
-            Map<String, PlayerStrategy> players = new HashMap<>(3);
-            players.put("0", player0Mock);
-            players.put("1", player1Mock);
-            players.put("2", player2Mock);
-
-            gc.play(players);
-
-            wait(700);
-        });
+        // when
+        GameController gc = new GameControllerBase(PlayerStrategy.class, stateMachine, () -> new Model(), propertiesMock, new ConnectorAdapterBuilderBase());
+        Map<String, PlayerStrategy> players = new HashMap<>(3);
+        players.put("0", player0Mock);
+        players.put("1", player1Mock);
+        players.put("2", player2Mock);
+        gc.play(players);
+        wait(700);
 
         then(trigger0Mock).should(times(1)).execute(any(Model.class));
         then(trigger1Mock).should(times(0)).execute(any(Model.class));

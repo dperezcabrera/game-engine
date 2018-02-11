@@ -17,10 +17,7 @@ package com.github.dperezcabrera.ge.io;
 
 import org.junit.jupiter.api.Test;
 
-import static com.github.dperezcabrera.ge.test.TestUtility.given;
-import static com.github.dperezcabrera.ge.test.TestUtility.returnedObject;
-import static com.github.dperezcabrera.ge.test.TestUtility.when;
-import static org.assertj.core.api.BDDAssertions.then;
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -32,28 +29,28 @@ public class GameEventTest {
 
     @Test
     public void testConstructorCommand() {
-        given(() -> instance = new GameEvent("command"));
+        instance = new GameEvent("command");
 
-        when(() -> new GameEvent(instance.toFrame()));
+        GameEvent result = new GameEvent(instance.toFrame());
 
-        then(returnedObject()).isEqualTo(instance);
+        assertEquals(instance, result);
     }
 
     @Test
     public void testConstructorMessage() {
-        given(() -> instance = new GameEvent("command", "01234567"));
+        instance = new GameEvent("command", "01234567");
 
-        when(() -> GameEvent.fromFrame(instance.toFrame()));
+        GameEvent result = GameEvent.fromFrame(instance.toFrame());
 
-        then(returnedObject()).isEqualTo(instance);
+        assertEquals(instance, result);
     }
 
     @Test
     public void testConstructorBytes() {
-        given(() -> instance = new GameEvent("command", new byte[]{0, 1, 2, 3}));
+        instance = new GameEvent("command", new byte[]{0, 1, 2, 3});
 
-        when(() -> new GameEvent(instance.toFrame()));
+        GameEvent result = new GameEvent(instance.toFrame());
 
-        then(returnedObject()).isEqualTo(instance);
+        assertEquals(instance, result);
     }
 }

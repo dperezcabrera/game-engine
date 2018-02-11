@@ -21,11 +21,8 @@ import java.util.Properties;
 import java.util.concurrent.Executors;
 import org.junit.jupiter.api.Test;
 
-import static com.github.dperezcabrera.ge.test.TestUtility.given;
-import static com.github.dperezcabrera.ge.test.TestUtility.when;
-import static com.googlecode.catchexception.apis.BDDCatchException.caughtException;
-import static com.googlecode.catchexception.apis.BDDCatchException.when;
 import static org.assertj.core.api.BDDAssertions.then;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,7 +36,7 @@ public class StateMachineInstanceTest {
 
     StateMachineInstance instance;
     StateMachineDefinition<State, Model> stateMachine;
-     
+
     Model modelMock = mock(Model.class);
     StateTrigger<Model> trigger0Mock = mock(StateTrigger.class);
     StateTrigger<Model> trigger1Mock = mock(StateTrigger.class);
@@ -51,11 +48,11 @@ public class StateMachineInstanceTest {
 
     @Test
     public void testIsFinish() {
-        given (()-> stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.A)
+        stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.A)
                 .add(state(State.A).trigger(trigger0Mock).transition(State.B))
                 .add(state(State.B).transition(State.D, c -> c.getScores() != null).transition(State.C))
-                .add(state(State.C).trigger(trigger2Mock).transition(State.D)).build()
-        );
+                .add(state(State.C).trigger(trigger2Mock).transition(State.D))
+                .build();
 
         given(propertiesMock.getProperty("timeout.getRandom")).willReturn("1000");
         given(propertiesMock.containsKey("timeout.getRandom")).willReturn(true);
@@ -70,7 +67,7 @@ public class StateMachineInstanceTest {
             return 1;
         });
 
-        when (() -> instance = stateMachine.startInstance(modelMock));
+        instance = stateMachine.startInstance(modelMock);
 
         then(instance.isFinish()).isFalse();
     }
@@ -126,17 +123,13 @@ public class StateMachineInstanceTest {
         given(player2Mock.getRandom(0L, 2)).willReturn(0);
 
         StateMachineInstance instance = stateMachine.startInstance(modelMock);
+        
         Executors.newFixedThreadPool(1).submit(() -> instance.execute());
         synchronized (mutex) {
             mutex.wait();
         }
 
-        when(instance).execute();
-
-        then(caughtException())
-                .isInstanceOf(StateMachineException.class)
-                .hasMessage("This instance is already running")
-                .hasNoCause();
+        assertThrows(StateMachineException.class, () -> instance.execute(), "This instance is already running");
     }
 
     @Test
@@ -154,34 +147,23 @@ public class StateMachineInstanceTest {
         StateMachineInstance instance = stateMachine.startInstance(modelMock);
         instance.execute();
 
-        when(instance).execute();
-
-        then(caughtException())
-                .isInstanceOf(StateMachineException.class)
-                .hasMessage("This instance has been executed")
-                .hasNoCause();
+        assertThrows(StateMachineException.class, () -> instance.execute(), "This instance has been executed");
     }
 
     @Test
     public void testExecuteException() {
-        RuntimeException exception = new RuntimeException("Unexpected Error");
         StateMachineDefinition<State, Model> stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.A)
                 .add(state(State.A).trigger(trigger0Mock).transition(State.B))
                 .add(state(State.B).transition(State.D, c -> c.getScores() != null).transition(State.C))
                 .add(state(State.C).trigger(trigger2Mock).transition(State.D)).build();
 
-        willThrow(exception).given(trigger0Mock).execute(any(Model.class));
+        willThrow(new RuntimeException("Unexpected Error")).given(trigger0Mock).execute(any(Model.class));
 
         given(player0Mock.getRandom(0L, 0)).willReturn(0);
         given(player1Mock.getRandom(0L, 1)).willReturn(1);
         given(player2Mock.getRandom(0L, 2)).willReturn(2);
 
-        when(stateMachine.startInstance(modelMock)).execute();
-
-        then(caughtException())
-                .isInstanceOf(StateMachineException.class)
-                .hasMessage("There is an error")
-                .hasCause(exception);
+        assertThrows(StateMachineException.class, () -> stateMachine.startInstance(modelMock).execute(), "There is an error");
     }
 
     /**

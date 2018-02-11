@@ -21,15 +21,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willThrow;
 
-import static com.github.dperezcabrera.ge.test.TestUtility.givenMock;
-import static com.github.dperezcabrera.ge.test.TestUtility.returnedObject;
-import static com.github.dperezcabrera.ge.test.TestUtility.when;
-import static com.googlecode.catchexception.apis.BDDCatchException.caughtException;
-import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  *
@@ -42,41 +43,39 @@ public class UtilitiesTest {
         Class type = double.class;
         Object expResult = 0d;
 
-        when(() -> Utilities.getDefaultValue(type));
+        Object result = Utilities.getDefaultValue(type);
 
-        then(returnedObject()).isEqualTo(expResult);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void testClose() throws IOException {
         Closeable c = mock(Closeable.class);
 
-        when(() -> Utilities.close(c));
+        boolean result = Utilities.close(c);
 
-        then(returnedObject(Boolean.class)).isTrue();
+        assertTrue(result);
 
-        BDDMockito.then(c).should().close();
+        then(c).should().close();
     }
 
     @Test
     public void testCloseNull() throws IOException {
 
-        when(() -> Utilities.close(null));
+        boolean result = Utilities.close(null);
 
-        then(returnedObject(Boolean.class)).isFalse();
-        then(caughtException()).isNull();
+        assertFalse(result);
     }
 
     @Test
     public void testCloseException() throws IOException {
         Closeable c = mock(Closeable.class);
 
-        givenMock(c).willThrow(IOException.class).callingTo().close();
+        willThrow(IOException.class).given(c).close();
 
-        when(() -> Utilities.close(c));
+        boolean result = Utilities.close(c);
 
-        then(returnedObject(Boolean.class)).isFalse();
-        then(caughtException()).isNull();
+        assertFalse(result);
     }
 
     @Test
@@ -85,9 +84,7 @@ public class UtilitiesTest {
         int minValue = 0;
         String name = "name";
 
-        when(() -> Utilities.checkMinValueArgument(o, minValue, name));
-
-        then(caughtException()).isNull();
+        Utilities.checkMinValueArgument(o, minValue, name);
     }
 
     @Test
@@ -96,12 +93,9 @@ public class UtilitiesTest {
         int minValue = 1;
         String name = "name";
 
-        when(() -> Utilities.checkMinValueArgument(o, minValue, name));
-
-        then(caughtException())
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("The argument " + name + " can not be less than <" + minValue + "> and it is <" + o + ">.")
-                .hasNoCause();
+        assertThrows(IllegalArgumentException.class,
+                () -> Utilities.checkMinValueArgument(o, minValue, name),
+                "The argument " + name + " can not be less than <" + minValue + "> and it is <" + o + ">.");
     }
 
     @Test
@@ -110,9 +104,7 @@ public class UtilitiesTest {
         long minValue = 0L;
         String name = "name";
 
-        when(() -> Utilities.checkMinValueArgument(o, minValue, name));
-
-        then(caughtException()).isNull();
+        Utilities.checkMinValueArgument(o, minValue, name);
     }
 
     @Test
@@ -121,43 +113,32 @@ public class UtilitiesTest {
         long minValue = 1L;
         String name = "name";
 
-        when(() -> Utilities.checkMinValueArgument(o, minValue, name));
-
-        then(caughtException())
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("The argument " + name + " can not be less than <" + minValue + "> and it is <" + o + ">.")
-                .hasNoCause();
+        assertThrows(IllegalArgumentException.class,
+                () -> Utilities.checkMinValueArgument(o, minValue, name),
+                "The argument " + name + " can not be less than <" + minValue + "> and it is <" + o + ">.");
     }
 
     @Test
     public void testCheckNullOrEmptyArgument_Collection() {
-        when(() -> Utilities.checkNullOrEmptyArgument(Arrays.asList("a"), "name"));
-
-        then(caughtException()).isNull();
+        Utilities.checkNullOrEmptyArgument(Arrays.asList("a"), "name");
     }
 
     @Test
     public void testCheckNullOrEmptyArgument_Collection_null() {
         String name = "name";
 
-        when(() -> Utilities.checkNullOrEmptyArgument((List) null, name));
-
-        then(caughtException())
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("The argument " + name + " can not be null or empty.")
-                .hasNoCause();
+        assertThrows(IllegalArgumentException.class,
+                () -> Utilities.checkNullOrEmptyArgument((List) null, name),
+                "The argument " + name + " can not be null or empty.");
     }
 
     @Test
     public void testCheckNullOrEmptyArgument_Collection_empty() {
         String name = "name";
 
-        when(() -> Utilities.checkNullOrEmptyArgument(Arrays.asList(), name));
-
-        then(caughtException())
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("The argument " + name + " can not be null or empty.")
-                .hasNoCause();
+        assertThrows(IllegalArgumentException.class,
+                () -> Utilities.checkNullOrEmptyArgument(Arrays.asList(), name),
+                "The argument " + name + " can not be null or empty.");
     }
 
     @Test
@@ -166,9 +147,7 @@ public class UtilitiesTest {
         Map<String, String> map = new HashMap<>();
         map.put(name, name);
 
-        when(() -> Utilities.checkNullOrEmptyArgument(map, name));
-
-        then(caughtException()).isNull();
+        Utilities.checkNullOrEmptyArgument(map, name);
     }
 
     @Test
@@ -176,12 +155,9 @@ public class UtilitiesTest {
         String name = "name";
         Map<String, String> map = null;
 
-        when(() -> Utilities.checkNullOrEmptyArgument(map, name));
-
-        then(caughtException())
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("The argument " + name + " can not be null or empty.")
-                .hasNoCause();
+        assertThrows(IllegalArgumentException.class,
+                () -> Utilities.checkNullOrEmptyArgument(map, name),
+                "The argument " + name + " can not be null or empty.");
     }
 
     @Test
@@ -189,12 +165,9 @@ public class UtilitiesTest {
         String name = "name";
         Map<String, String> map = new HashMap<>();
 
-        when(() -> Utilities.checkNullOrEmptyArgument(map, name));
-
-        then(caughtException())
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("The argument " + name + " can not be null or empty.")
-                .hasNoCause();
+        assertThrows(IllegalArgumentException.class,
+                () -> Utilities.checkNullOrEmptyArgument(map, name),
+                "The argument " + name + " can not be null or empty.");
     }
 
     @Test
@@ -203,9 +176,7 @@ public class UtilitiesTest {
         String name = "name";
         int length = 1;
 
-        when(() -> Utilities.checkListSizeArgument(a, name, length));
-
-        then(caughtException()).isNull();
+        Utilities.checkListSizeArgument(a, name, length);
     }
 
     @Test
@@ -214,12 +185,9 @@ public class UtilitiesTest {
         String name = "name";
         int length = 1;
 
-        when(() -> Utilities.checkListSizeArgument(a, name, length));
-
-        then(caughtException())
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("The argument " + name + " can not be null and it must to contain " + length + " elements.")
-                .hasNoCause();
+        assertThrows(IllegalArgumentException.class,
+                () -> Utilities.checkListSizeArgument(a, name, length),
+                "The argument " + name + " can not be null and it must to contain " + length + " elements.");
     }
 
     @Test
@@ -228,12 +196,9 @@ public class UtilitiesTest {
         String name = "name";
         int length = 1;
 
-        when(() -> Utilities.checkListSizeArgument(a, name, length));
-
-        then(caughtException())
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("The argument " + name + " can not be null and it must to contain " + length + " elements.")
-                .hasNoCause();
+        assertThrows(IllegalArgumentException.class,
+                () -> Utilities.checkListSizeArgument(a, name, length),
+                "The argument " + name + " can not be null and it must to contain " + length + " elements.");
     }
 
     @Test
@@ -243,11 +208,7 @@ public class UtilitiesTest {
         Object[] a = new Object[length];
         String name = "name";
 
-        when(() -> {
-            Utilities.checkArrayLengthArgument(a, name, length);
-        });
-
-        then(caughtException()).isNull();
+        Utilities.checkArrayLengthArgument(a, name, length);
     }
 
     @Test
@@ -256,14 +217,9 @@ public class UtilitiesTest {
         Object[] a = null;
         String name = "name";
 
-        when(() -> {
-            Utilities.checkArrayLengthArgument(a, name, length);
-        });
-
-        then(caughtException())
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("The argument " + name + " can not be null and its length must be " + length + ".")
-                .hasNoCause();
+        assertThrows(IllegalArgumentException.class,
+                () -> Utilities.checkArrayLengthArgument(a, name, length),
+                "The argument " + name + " can not be null and its length must be " + length + ".");
     }
 
     @Test
@@ -272,14 +228,9 @@ public class UtilitiesTest {
         Object[] a = new Object[length + 1];
         String name = "name";
 
-        when(() -> {
-            Utilities.checkArrayLengthArgument(a, name, length);
-        });
-
-        then(caughtException())
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("The argument " + name + " can not be null and its length must be " + length + ".")
-                .hasNoCause();
+        assertThrows(IllegalArgumentException.class,
+                () -> Utilities.checkArrayLengthArgument(a, name, length),
+                "The argument " + name + " can not be null and its length must be " + length + ".");
     }
 
     @Test
@@ -288,8 +239,6 @@ public class UtilitiesTest {
         String message = "error";
         Object[] args = null;
 
-        when(() -> Utilities.checkArgument(throwException, message, args));
-
-        then(caughtException()).isNull();
+        Utilities.checkArgument(throwException, message, args);
     }
 }

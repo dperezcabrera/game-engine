@@ -28,7 +28,6 @@ import com.github.dperezcabrera.ge.remote.GameEngineClient;
 import com.github.dperezcabrera.ge.remote.GameEngineServer;
 import com.github.dperezcabrera.ge.st.StateMachineDefinition;
 import com.github.dperezcabrera.ge.st.StateMachineDefinitionBuilder;
-import com.github.dperezcabrera.ge.test.TestUtility;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +35,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.junit.jupiter.api.Test;
@@ -113,7 +113,7 @@ public class RemoteIntegrationTest {
             final int index = i;
             final String login = "player-" + index;
             loginPassword.put(login, UUID.randomUUID().toString());
-            TestUtility.execute(executors, 500L, () -> GameEngineClient.start("127.0.0.1", PORT, new PlayerStrategyRandom((login)), login, AuthenticationLoginPassword.getAuthenticationClient(login, loginPassword.get(login)), SERIALIZER));
+            execute(executors, 500L, () -> GameEngineClient.start("127.0.0.1", PORT, new PlayerStrategyRandom((login)), login, AuthenticationLoginPassword.getAuthenticationClient(login, loginPassword.get(login)), SERIALIZER));
         }
         try (GameEngineServer server = new GameEngineServer(new ConnectorAdapterBuilderBase(), SERIALIZER)) {
             Map<String, PlayerStrategy> players = server.getPlayers(PlayerStrategy.class, PORT, CONNECTION_TIMEOUT, AUTENTICATION_TIMEOUT, PLAYERS, AuthenticationLoginPassword.getAuthenticationServer(loginPassword), properties);
@@ -123,6 +123,20 @@ public class RemoteIntegrationTest {
                 log.info("scores: \n{}", scores);
             }
         }
+    }
+
+    private static void execute(Executor executor, long time, Runnable runnable) {
+        executor.execute(() -> {
+            Object mutex = new Object();
+            synchronized (mutex) {
+                try {
+                    mutex.wait(time);
+                } catch (InterruptedException ex) {
+                    //
+                }
+            }
+            runnable.run();
+        });
     }
 
     @Timeout("timeout.getRandom")

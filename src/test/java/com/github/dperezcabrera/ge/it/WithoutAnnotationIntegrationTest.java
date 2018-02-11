@@ -28,8 +28,6 @@ import java.util.Map;
 import java.util.Properties;
 import org.junit.jupiter.api.Test;
 
-import static com.github.dperezcabrera.ge.test.TestUtility.given;
-import static com.github.dperezcabrera.ge.test.TestUtility.when;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -56,9 +54,7 @@ public class WithoutAnnotationIntegrationTest {
     @Test
     public synchronized void testMain() throws InterruptedException {
 
-        given( () -> trigger0 = c -> {
-            c.getPlayersConnector().forEach((n, p) -> assertEquals(null, p.getRandom(0L, Integer.valueOf(n))));
-        });
+        trigger0 = c -> c.getPlayersConnector().forEach((n, p) -> assertEquals(null, p.getRandom(0L, Integer.valueOf(n))));
         given(propertiesMock.getProperty("timeout.getRandom")).willReturn("500");
         given(propertiesMock.containsKey("timeout.getRandom")).willReturn(true);
         given(player0Mock.getRandom(0L, 0)).willReturn(1);
@@ -69,23 +65,22 @@ public class WithoutAnnotationIntegrationTest {
             }
             return 2;
         });
-        given(() -> stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.A)
+        stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.A)
                 .add(state(State.A).trigger(trigger0).transition(State.B))
                 .add(state(State.B).transition(State.D, c -> c.getScores() != null).transition(State.C))
                 .add(state(State.C).trigger(trigger2Mock).transition(State.D))
-                .add(state(State.D).trigger(trigger1Mock)).build()
-        );
+                .add(state(State.D).trigger(trigger1Mock))
+                .build();
 
-        when(() -> {
-            GameController gc = new GameControllerBase(PlayerStrategy.class, stateMachine, () -> new Model(), propertiesMock, new ConnectorAdapterBuilderBase());
-            Map<String, PlayerStrategy> players = new HashMap<>(3);
-            players.put("0", player0Mock);
-            players.put("1", player1Mock);
-            players.put("2", player2Mock);
-            gc.play(players);
-            wait(700);
-        });
-        
+        // when
+        GameController gc = new GameControllerBase(PlayerStrategy.class, stateMachine, () -> new Model(), propertiesMock, new ConnectorAdapterBuilderBase());
+        Map<String, PlayerStrategy> players = new HashMap<>(3);
+        players.put("0", player0Mock);
+        players.put("1", player1Mock);
+        players.put("2", player2Mock);
+        gc.play(players);
+        wait(700);
+
         then(player0Mock).should(times(1)).getRandom(0L, 0);
         then(player1Mock).should(times(1)).getRandom(0L, 1);
         then(player2Mock).should(times(1)).getRandom(0L, 2);
