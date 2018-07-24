@@ -2,6 +2,5 @@
 [![Build Status](https://travis-ci.org/dperezcabrera/game-engine.svg?branch=master)](https://travis-ci.org/dperezcabrera/game-engine)
 [![Release](https://jitpack.io/v/com.github.dperezcabrera/game-engine.svg)](https://jitpack.io/#com.github.dperezcabrera/game-engine)
 [![Download](https://api.bintray.com/packages/dperezcabrera/public/game-engine/images/download.svg?version=1.0.0-RELEASE) ](https://bintray.com/dperezcabrera/public/game-engine/1.0.0-RELEASE/link)
-[![Dependency Status](https://www.versioneye.com/user/projects/5a0f25430fb24f0010738d07/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5a0f25430fb24f0010738d07)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=com.github.dperezcabrera%3Agame-engine&metric=alert_status)](https://sonarcloud.io/dashboard/index/com.github.dperezcabrera:game-engine)
 [![GitHub issues](https://img.shields.io/github/issues-raw/dperezcabrera/game-engine.svg?maxAge=2592000)](https://github.com/dperezcabrera/game-engine/issues)
