@@ -33,10 +33,10 @@ import static org.mockito.Mockito.mock;
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public class GameControllerBaseTest {
+public class GameControllerBaseTests {
 
     GameControllerBase instance;
-    
+
     StateMachineDefinition<State, Model> stateMachineMock = mock(StateMachineDefinition.class);
     ConnectorAdapterBuilderBase connectorAdapterFactoryMock = mock(ConnectorAdapterBuilderBase.class);
     Properties propertiesMock = mock(Properties.class);
@@ -50,10 +50,11 @@ public class GameControllerBaseTest {
     public void testConstructorError() {
         given(propertiesMock.getProperty("timeout.getRandom")).willReturn("..");
         given(propertiesMock.containsKey("timeout.getRandom")).willReturn(true);
-        
-        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, () -> new Model(), propertiesMock, connectorAdapterFactoryMock);
-        
-        assertThrows(GameException.class, () -> instance.play(map("a", playerStrategyMock)) , "Property timeout error");
+
+        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, () -> new Model(), propertiesMock,
+                connectorAdapterFactoryMock);
+
+        assertThrows(GameException.class, () -> instance.play(map("a", playerStrategyMock)), "Property timeout error");
     }
 
     @Test
@@ -64,8 +65,9 @@ public class GameControllerBaseTest {
         given(stateMachineMock.startInstance(modelMock)).willReturn(stateMachineInstanceMock);
         given(stateMachineInstanceMock.execute()).willReturn(modelMock);
         given(modelMock.getScores()).willReturn(expectResultMock);
-        
-        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock, connectorAdapterFactoryMock);
+
+        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock,
+                connectorAdapterFactoryMock);
 
         assertThrows(NullPointerException.class, () -> instance.play(map(null, playerStrategyMock)));
     }
@@ -78,10 +80,12 @@ public class GameControllerBaseTest {
         given(stateMachineMock.startInstance(modelMock)).willReturn(stateMachineInstanceMock);
         given(stateMachineInstanceMock.execute()).willReturn(modelMock);
         given(modelMock.getScores()).willReturn(expectResultMock);
-        
-        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock, connectorAdapterFactoryMock);
 
-        assertThrows(IllegalArgumentException.class, () -> instance.play(null), "The argument players can not be null or empty.");
+        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock,
+                connectorAdapterFactoryMock);
+
+        assertThrows(IllegalArgumentException.class, () -> instance.play(null),
+                "The argument players can not be null or empty.");
     }
 
     @Test
@@ -92,9 +96,11 @@ public class GameControllerBaseTest {
         given(stateMachineMock.startInstance(modelMock)).willReturn(stateMachineInstanceMock);
         given(stateMachineInstanceMock.execute()).willReturn(modelMock);
         given(modelMock.getScores()).willReturn(expectResultMock);
-        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock, connectorAdapterFactoryMock);
+        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock,
+                connectorAdapterFactoryMock);
 
-        assertThrows(IllegalArgumentException.class, () -> instance.play(new HashMap<>()), "The argument players can not be null or empty.");
+        assertThrows(IllegalArgumentException.class, () -> instance.play(new HashMap<>()),
+                "The argument players can not be null or empty.");
     }
 
     @Test
@@ -105,7 +111,8 @@ public class GameControllerBaseTest {
         given(stateMachineMock.startInstance(modelMock)).willReturn(stateMachineInstanceMock);
         given(stateMachineInstanceMock.execute()).willReturn(modelMock);
         given(modelMock.getScores()).willReturn(expectResultMock);
-        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock, connectorAdapterFactoryMock);
+        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock,
+                connectorAdapterFactoryMock);
 
         assertThrows(NullPointerException.class, () -> instance.play(map("player", null)));
     }
@@ -118,7 +125,8 @@ public class GameControllerBaseTest {
         given(stateMachineMock.startInstance(modelMock)).willReturn(stateMachineInstanceMock);
         given(stateMachineInstanceMock.execute()).willReturn(modelMock);
         given(modelMock.getScores()).willReturn(expectResultMock);
-        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock, connectorAdapterFactoryMock);
+        instance = new GameControllerBase(PlayerStrategy.class, stateMachineMock, contextFactoryMock, propertiesMock,
+                connectorAdapterFactoryMock);
 
         Map<String, Double> result = instance.play(map("player", playerStrategyMock));
 
@@ -142,9 +150,6 @@ public class GameControllerBaseTest {
     }
 
     public enum State {
-        A,
-        B,
-        C,
-        D
+        A, B, C, D
     }
 }

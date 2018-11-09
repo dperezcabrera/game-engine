@@ -40,7 +40,7 @@ import static org.mockito.Mockito.times;
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public class ExceptionsIntegrationTest {
+public class ExceptionsIntegrationTests {
 
     StateMachineDefinition<State, Model> stateMachine;
     StateTrigger<Model> trigger0 = null;
@@ -70,11 +70,10 @@ public class ExceptionsIntegrationTest {
         };
         given(propertiesMock.getProperty("timeout.getRandom")).willReturn("500");
         given(propertiesMock.containsKey("timeout.getRandom")).willReturn(true);
-        stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.A)
+        stateMachine = StateMachineDefinitionBuilder.<State, Model> create(State.A)
                 .add(state(State.A).trigger(trigger0).transition(State.B))
                 .add(state(State.B).transition(State.D, c -> c.getScores() != null).transition(State.C))
-                .add(state(State.C).trigger(trigger2Mock).transition(State.D))
-                .add(state(State.D).trigger(trigger1Mock))
+                .add(state(State.C).trigger(trigger2Mock).transition(State.D)).add(state(State.D).trigger(trigger1Mock))
                 .build();
 
         given(player0Mock.getRandom(0L, 0)).willReturn(0);
@@ -86,8 +85,9 @@ public class ExceptionsIntegrationTest {
             return 1;
         });
 
-        //when
-        GameController gc = new GameControllerBase(PlayerStrategy.class, stateMachine, () -> new Model(), propertiesMock, new ConnectorAdapterBuilderBase());
+        // when
+        GameController gc = new GameControllerBase(PlayerStrategy.class, stateMachine, () -> new Model(),
+                propertiesMock, new ConnectorAdapterBuilderBase());
         Map<String, PlayerStrategy> players = new HashMap<>(3);
         players.put("0", player0Mock);
         players.put("1", player1Mock);
@@ -101,7 +101,7 @@ public class ExceptionsIntegrationTest {
     }
 
     public static StateMachineDefinitionBuilder.StateTriggerBuilder<State, Model> state(State state) {
-        return StateTriggerBuilder.<State, Model>state(state);
+        return StateTriggerBuilder.<State, Model> state(state);
     }
 
     @Timeout("timeout.getRandom")
@@ -115,9 +115,6 @@ public class ExceptionsIntegrationTest {
     }
 
     public enum State {
-        A,
-        B,
-        C,
-        D
+        A, B, C, D
     }
 }

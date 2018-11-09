@@ -48,7 +48,7 @@ import org.junit.jupiter.api.BeforeEach;
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
 @Slf4j
-public class RemoteIntegrationTest {
+public class RemoteIntegrationTests {
 
     private static final Serializer<MethodCall, byte[]> SERIALIZER = new JsonSerializer(PlayerStrategy.class);
     private static final int PORT = 3333;
@@ -60,7 +60,7 @@ public class RemoteIntegrationTest {
     Properties properties;
 
     private static StateMachineDefinitionBuilder.StateTriggerBuilder<State, Model> state(State state) {
-        return StateMachineDefinitionBuilder.StateTriggerBuilder.<State, Model>state(state);
+        return StateMachineDefinitionBuilder.StateTriggerBuilder.<State, Model> state(state);
     }
 
     @BeforeEach
@@ -68,7 +68,7 @@ public class RemoteIntegrationTest {
         properties = new Properties();
         properties.setProperty("timeout.getRandom", "500");
 
-        stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.BEGIN)
+        stateMachine = StateMachineDefinitionBuilder.<State, Model> create(State.BEGIN)
                 .add(state(State.BEGIN).trigger(c -> {
                     int size = c.getPlayersConnector().size();
                     for (Entry<String, PlayerStrategy> e : c.getPlayersConnector().entrySet()) {
@@ -79,8 +79,7 @@ public class RemoteIntegrationTest {
                             c.commands.put(e.getKey(), -1);
                         }
                     }
-                }).transition(State.RESULT))
-                .add(state(State.RESULT).trigger(c -> {
+                }).transition(State.RESULT)).add(state(State.RESULT).trigger(c -> {
                     int counter = 0;
                     int players = 0;
                     Map<Integer, String> candidates = new HashMap<>();
@@ -113,12 +112,18 @@ public class RemoteIntegrationTest {
             final int index = i;
             final String login = "player-" + index;
             loginPassword.put(login, UUID.randomUUID().toString());
-            execute(executors, 500L, () -> GameEngineClient.start("127.0.0.1", PORT, new PlayerStrategyRandom((login)), login, AuthenticationLoginPassword.getAuthenticationClient(login, loginPassword.get(login)), SERIALIZER));
+            execute(executors, 500L,
+                    () -> GameEngineClient.start("127.0.0.1", PORT, new PlayerStrategyRandom((login)), login,
+                            AuthenticationLoginPassword.getAuthenticationClient(login, loginPassword.get(login)),
+                            SERIALIZER));
         }
         try (GameEngineServer server = new GameEngineServer(new ConnectorAdapterBuilderBase(), SERIALIZER)) {
-            Map<String, PlayerStrategy> players = server.getPlayers(PlayerStrategy.class, PORT, CONNECTION_TIMEOUT, AUTENTICATION_TIMEOUT, PLAYERS, AuthenticationLoginPassword.getAuthenticationServer(loginPassword), properties);
+            Map<String, PlayerStrategy> players = server.getPlayers(PlayerStrategy.class, PORT, CONNECTION_TIMEOUT,
+                    AUTENTICATION_TIMEOUT, PLAYERS, AuthenticationLoginPassword.getAuthenticationServer(loginPassword),
+                    properties);
             if (players.size() >= 1) {
-                GameController<PlayerStrategy> gc = new GameControllerBase(PlayerStrategy.class, stateMachine, () -> new Model(), properties, new ConnectorAdapterBuilderBase());
+                GameController<PlayerStrategy> gc = new GameControllerBase(PlayerStrategy.class, stateMachine,
+                        () -> new Model(), properties, new ConnectorAdapterBuilderBase());
                 Map<String, Double> scores = gc.play(players);
                 log.info("scores: \n{}", scores);
             }
@@ -153,8 +158,7 @@ public class RemoteIntegrationTest {
     }
 
     public enum State {
-        BEGIN,
-        RESULT,
+        BEGIN, RESULT,
     }
 
     public static class PlayerStrategyRandom implements PlayerStrategy {

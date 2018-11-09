@@ -32,15 +32,10 @@ import org.junit.jupiter.params.provider.MethodSource;
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public class FactorialPermutationTest {
+public class FactorialPermutationTests {
 
     private static Collection<Object[]> data() {
-        Object data[][] = {
-            {1, 1},
-            {2, 2},
-            {3, 6},
-            {4, 24},
-            {5, 120},};
+        Object data[][] = { { 1, 1 }, { 2, 2 }, { 3, 6 }, { 4, 24 }, { 5, 120 }, };
         return Arrays.asList(data);
     }
 

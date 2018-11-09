@@ -32,7 +32,7 @@ import static org.mockito.Mockito.mock;
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public class StateMachineInstanceTest {
+public class StateMachineInstanceTests {
 
     StateMachineInstance instance;
     StateMachineDefinition<State, Model> stateMachine;
@@ -48,11 +48,10 @@ public class StateMachineInstanceTest {
 
     @Test
     public void testIsFinish() {
-        stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.A)
+        stateMachine = StateMachineDefinitionBuilder.<State, Model> create(State.A)
                 .add(state(State.A).trigger(trigger0Mock).transition(State.B))
                 .add(state(State.B).transition(State.D, c -> c.getScores() != null).transition(State.C))
-                .add(state(State.C).trigger(trigger2Mock).transition(State.D))
-                .build();
+                .add(state(State.C).trigger(trigger2Mock).transition(State.D)).build();
 
         given(propertiesMock.getProperty("timeout.getRandom")).willReturn("1000");
         given(propertiesMock.containsKey("timeout.getRandom")).willReturn(true);
@@ -73,7 +72,7 @@ public class StateMachineInstanceTest {
     }
 
     public static StateMachineDefinitionBuilder.StateTriggerBuilder<State, Model> state(State state) {
-        return StateMachineDefinitionBuilder.StateTriggerBuilder.<State, Model>state(state);
+        return StateMachineDefinitionBuilder.StateTriggerBuilder.<State, Model> state(state);
     }
 
     @Timeout("timeout.getRandom")
@@ -87,10 +86,7 @@ public class StateMachineInstanceTest {
     }
 
     public enum State {
-        A,
-        B,
-        C,
-        D
+        A, B, C, D
     }
 
     /**
@@ -113,9 +109,8 @@ public class StateMachineInstanceTest {
             } catch (InterruptedException ex) {
             }
         };
-        StateMachineDefinition<State, Model> stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.A)
-                .add(state(State.A).trigger(trigger0Mock).transition(State.B))
-                .add(state(State.B).transition(State.C))
+        StateMachineDefinition<State, Model> stateMachine = StateMachineDefinitionBuilder.<State, Model> create(State.A)
+                .add(state(State.A).trigger(trigger0Mock).transition(State.B)).add(state(State.B).transition(State.C))
                 .add(state(State.C).trigger(trigger2Mock).transition(State.D)).build();
 
         given(player0Mock.getRandom(0L, 0)).willReturn(0);
@@ -123,7 +118,7 @@ public class StateMachineInstanceTest {
         given(player2Mock.getRandom(0L, 2)).willReturn(0);
 
         StateMachineInstance instance = stateMachine.startInstance(modelMock);
-        
+
         Executors.newFixedThreadPool(1).submit(() -> instance.execute());
         synchronized (mutex) {
             mutex.wait();
@@ -135,7 +130,7 @@ public class StateMachineInstanceTest {
     @Test
     public void testExecuteFinished() {
 
-        StateMachineDefinition<State, Model> stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.A)
+        StateMachineDefinition<State, Model> stateMachine = StateMachineDefinitionBuilder.<State, Model> create(State.A)
                 .add(state(State.A).trigger(trigger0Mock).transition(State.B))
                 .add(state(State.B).transition(State.D, c -> c.getScores() != null).transition(State.C))
                 .add(state(State.C).trigger(trigger2Mock).transition(State.D)).build();
@@ -152,7 +147,7 @@ public class StateMachineInstanceTest {
 
     @Test
     public void testExecuteException() {
-        StateMachineDefinition<State, Model> stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.A)
+        StateMachineDefinition<State, Model> stateMachine = StateMachineDefinitionBuilder.<State, Model> create(State.A)
                 .add(state(State.A).trigger(trigger0Mock).transition(State.B))
                 .add(state(State.B).transition(State.D, c -> c.getScores() != null).transition(State.C))
                 .add(state(State.C).trigger(trigger2Mock).transition(State.D)).build();
@@ -163,7 +158,8 @@ public class StateMachineInstanceTest {
         given(player1Mock.getRandom(0L, 1)).willReturn(1);
         given(player2Mock.getRandom(0L, 2)).willReturn(2);
 
-        assertThrows(StateMachineException.class, () -> stateMachine.startInstance(modelMock).execute(), "There is an error");
+        assertThrows(StateMachineException.class, () -> stateMachine.startInstance(modelMock).execute(),
+                "There is an error");
     }
 
     /**

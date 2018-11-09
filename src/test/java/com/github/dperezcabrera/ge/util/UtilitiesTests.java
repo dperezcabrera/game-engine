@@ -36,7 +36,7 @@ import static org.mockito.Mockito.when;
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public class UtilitiesTest {
+public class UtilitiesTests {
 
     @Test
     public void testGetDefaultValue() {
@@ -93,8 +93,7 @@ public class UtilitiesTest {
         int minValue = 1;
         String name = "name";
 
-        assertThrows(IllegalArgumentException.class,
-                () -> Utilities.checkMinValueArgument(o, minValue, name),
+        assertThrows(IllegalArgumentException.class, () -> Utilities.checkMinValueArgument(o, minValue, name),
                 "The argument " + name + " can not be less than <" + minValue + "> and it is <" + o + ">.");
     }
 
@@ -113,8 +112,7 @@ public class UtilitiesTest {
         long minValue = 1L;
         String name = "name";
 
-        assertThrows(IllegalArgumentException.class,
-                () -> Utilities.checkMinValueArgument(o, minValue, name),
+        assertThrows(IllegalArgumentException.class, () -> Utilities.checkMinValueArgument(o, minValue, name),
                 "The argument " + name + " can not be less than <" + minValue + "> and it is <" + o + ">.");
     }
 
@@ -127,8 +125,7 @@ public class UtilitiesTest {
     public void testCheckNullOrEmptyArgument_Collection_null() {
         String name = "name";
 
-        assertThrows(IllegalArgumentException.class,
-                () -> Utilities.checkNullOrEmptyArgument((List) null, name),
+        assertThrows(IllegalArgumentException.class, () -> Utilities.checkNullOrEmptyArgument((List) null, name),
                 "The argument " + name + " can not be null or empty.");
     }
 
@@ -136,8 +133,7 @@ public class UtilitiesTest {
     public void testCheckNullOrEmptyArgument_Collection_empty() {
         String name = "name";
 
-        assertThrows(IllegalArgumentException.class,
-                () -> Utilities.checkNullOrEmptyArgument(Arrays.asList(), name),
+        assertThrows(IllegalArgumentException.class, () -> Utilities.checkNullOrEmptyArgument(Arrays.asList(), name),
                 "The argument " + name + " can not be null or empty.");
     }
 
@@ -155,8 +151,7 @@ public class UtilitiesTest {
         String name = "name";
         Map<String, String> map = null;
 
-        assertThrows(IllegalArgumentException.class,
-                () -> Utilities.checkNullOrEmptyArgument(map, name),
+        assertThrows(IllegalArgumentException.class, () -> Utilities.checkNullOrEmptyArgument(map, name),
                 "The argument " + name + " can not be null or empty.");
     }
 
@@ -165,8 +160,7 @@ public class UtilitiesTest {
         String name = "name";
         Map<String, String> map = new HashMap<>();
 
-        assertThrows(IllegalArgumentException.class,
-                () -> Utilities.checkNullOrEmptyArgument(map, name),
+        assertThrows(IllegalArgumentException.class, () -> Utilities.checkNullOrEmptyArgument(map, name),
                 "The argument " + name + " can not be null or empty.");
     }
 
@@ -185,8 +179,7 @@ public class UtilitiesTest {
         String name = "name";
         int length = 1;
 
-        assertThrows(IllegalArgumentException.class,
-                () -> Utilities.checkListSizeArgument(a, name, length),
+        assertThrows(IllegalArgumentException.class, () -> Utilities.checkListSizeArgument(a, name, length),
                 "The argument " + name + " can not be null and it must to contain " + length + " elements.");
     }
 
@@ -196,8 +189,7 @@ public class UtilitiesTest {
         String name = "name";
         int length = 1;
 
-        assertThrows(IllegalArgumentException.class,
-                () -> Utilities.checkListSizeArgument(a, name, length),
+        assertThrows(IllegalArgumentException.class, () -> Utilities.checkListSizeArgument(a, name, length),
                 "The argument " + name + " can not be null and it must to contain " + length + " elements.");
     }
 
@@ -217,8 +209,7 @@ public class UtilitiesTest {
         Object[] a = null;
         String name = "name";
 
-        assertThrows(IllegalArgumentException.class,
-                () -> Utilities.checkArrayLengthArgument(a, name, length),
+        assertThrows(IllegalArgumentException.class, () -> Utilities.checkArrayLengthArgument(a, name, length),
                 "The argument " + name + " can not be null and its length must be " + length + ".");
     }
 
@@ -228,8 +219,7 @@ public class UtilitiesTest {
         Object[] a = new Object[length + 1];
         String name = "name";
 
-        assertThrows(IllegalArgumentException.class,
-                () -> Utilities.checkArrayLengthArgument(a, name, length),
+        assertThrows(IllegalArgumentException.class, () -> Utilities.checkArrayLengthArgument(a, name, length),
                 "The argument " + name + " can not be null and its length must be " + length + ".");
     }
 

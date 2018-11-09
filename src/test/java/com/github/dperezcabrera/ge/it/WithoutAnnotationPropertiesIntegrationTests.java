@@ -39,7 +39,7 @@ import static org.mockito.Mockito.times;
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public class WithoutAnnotationPropertiesIntegrationTest {
+public class WithoutAnnotationPropertiesIntegrationTests {
 
     StateMachineDefinition<State, Model> stateMachine;
     StateTrigger<Model> trigger0 = null;
@@ -66,15 +66,15 @@ public class WithoutAnnotationPropertiesIntegrationTest {
             }
             return 2;
         });
-        stateMachine = StateMachineDefinitionBuilder.<State, Model>create(State.A)
+        stateMachine = StateMachineDefinitionBuilder.<State, Model> create(State.A)
                 .add(state(State.A).trigger(trigger0).transition(State.B))
                 .add(state(State.B).transition(State.D, c -> c.getScores() != null).transition(State.C))
-                .add(state(State.C).trigger(trigger2Mock).transition(State.D))
-                .add(state(State.D).trigger(trigger1Mock))
+                .add(state(State.C).trigger(trigger2Mock).transition(State.D)).add(state(State.D).trigger(trigger1Mock))
                 .build();
 
         // when
-        GameController gc = new GameControllerBase(PlayerStrategy.class, stateMachine, () -> new Model(), propertiesMock, new ConnectorAdapterBuilderBase());
+        GameController gc = new GameControllerBase(PlayerStrategy.class, stateMachine, () -> new Model(),
+                propertiesMock, new ConnectorAdapterBuilderBase());
         Map<String, PlayerStrategy> players = new HashMap<>(3);
         players.put("0", player0Mock);
         players.put("1", player1Mock);
@@ -88,7 +88,7 @@ public class WithoutAnnotationPropertiesIntegrationTest {
     }
 
     public static StateMachineDefinitionBuilder.StateTriggerBuilder<State, Model> state(State state) {
-        return StateTriggerBuilder.<State, Model>state(state);
+        return StateTriggerBuilder.<State, Model> state(state);
 
     }
 
@@ -103,9 +103,6 @@ public class WithoutAnnotationPropertiesIntegrationTest {
     }
 
     public enum State {
-        A,
-        B,
-        C,
-        D
+        A, B, C, D
     }
 }

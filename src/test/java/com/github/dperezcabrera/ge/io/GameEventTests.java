@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public class GameEventTest {
+public class GameEventTests {
 
     GameEvent instance;
 
@@ -47,7 +47,7 @@ public class GameEventTest {
 
     @Test
     public void testConstructorBytes() {
-        instance = new GameEvent("command", new byte[]{0, 1, 2, 3});
+        instance = new GameEvent("command", new byte[] { 0, 1, 2, 3 });
 
         GameEvent result = new GameEvent(instance.toFrame());
 

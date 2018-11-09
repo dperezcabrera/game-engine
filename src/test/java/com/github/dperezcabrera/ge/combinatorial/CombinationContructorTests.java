@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public class CombinationContructorTest {
+public class CombinationContructorTests {
 
     private Combination instance;
 
@@ -38,7 +38,7 @@ public class CombinationContructorTest {
 
         assertEquals(subItems, result);
     }
-    
+
     @Test
     public void testCombinations() {
         long expectCombinations = 6L;
@@ -58,7 +58,7 @@ public class CombinationContructorTest {
     public void testContructorSubItemError() {
         int subItems = 0;
         int items = 1;
-        
+
         assertThrows(IllegalArgumentException.class, () -> new Combination(subItems, items));
     }
 

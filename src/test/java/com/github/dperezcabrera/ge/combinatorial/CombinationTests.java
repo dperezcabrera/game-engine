@@ -29,24 +29,11 @@ import org.junit.jupiter.params.provider.MethodSource;
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public class CombinationTest {
+public class CombinationTests {
 
     private static Collection<Object[]> data() {
-        Object data[][] = {
-            {1, 1, 1},
-            {1, 2, 2},
-            {2, 2, 1},
-            {1, 3, 3},
-            {2, 3, 3},
-            {3, 3, 1},
-            {1, 4, 4},
-            {2, 4, 6},
-            {3, 4, 4},
-            {4, 4, 1},
-            {1, 5, 5},
-            {2, 5, 10},
-            {5, 7, 21}
-        };
+        Object data[][] = { { 1, 1, 1 }, { 1, 2, 2 }, { 2, 2, 1 }, { 1, 3, 3 }, { 2, 3, 3 }, { 3, 3, 1 }, { 1, 4, 4 },
+                { 2, 4, 6 }, { 3, 4, 4 }, { 4, 4, 1 }, { 1, 5, 5 }, { 2, 5, 10 }, { 5, 7, 21 } };
         return Arrays.asList(data);
     }
 
