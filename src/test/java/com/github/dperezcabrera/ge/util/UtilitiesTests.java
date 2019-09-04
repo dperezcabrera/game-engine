@@ -1,5 +1,5 @@
 /* 
- * Copyright 2017 David Pérez Cabrera <dperezcabrera@gmail.com>.
+ * Copyright 2019 David Pérez Cabrera <dperezcabrera@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,32 +21,20 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willThrow;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
 public class UtilitiesTests {
-
-    @Test
-    public void testGetDefaultValue() {
-        Class type = double.class;
-        Object expResult = 0d;
-
-        Object result = Utilities.getDefaultValue(type);
-
-        assertEquals(expResult, result);
-    }
 
     @Test
     public void testClose() throws IOException {

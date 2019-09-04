@@ -1,5 +1,5 @@
 /* 
- * Copyright 2017 David Pérez Cabrera <dperezcabrera@gmail.com>.
+ * Copyright 2019 David Pérez Cabrera <dperezcabrera@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package com.github.dperezcabrera.ge;
 
 import com.github.dperezcabrera.ge.impl.ExecutorMethodInvoker;
 import com.github.dperezcabrera.ge.st.StateMachineDefinition;
-import com.github.dperezcabrera.ge.util.Builder;
 import com.github.dperezcabrera.ge.util.Utilities;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -28,6 +27,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Supplier;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -44,7 +44,7 @@ public class GameControllerBase<P, E extends Enum, M extends GameContext<P>> imp
 
     private Class<P> typePlayer;
     private StateMachineDefinition<E, M> stateMachine;
-    private Builder<M> contextFactory;
+    private Supplier<M> contextFactory;
     private Properties properties;
     private ConnectorAdapterBuilder playerConnectorFactory;    
     
@@ -62,7 +62,7 @@ public class GameControllerBase<P, E extends Enum, M extends GameContext<P>> imp
         try {
             Map<String, P> connectors = new HashMap<>();
             players.forEach((playerName, player) -> addPlayer(playerName, player, executors, connectors, timeouts));
-            M context = contextFactory.build();
+            M context = contextFactory.get();
             context.setPlayersConnector(Collections.unmodifiableMap(connectors));
             context.setProperties(new Properties(properties));
             return stateMachine.startInstance(context).execute().getScores();

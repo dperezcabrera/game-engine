@@ -1,5 +1,5 @@
 /* 
- * Copyright 2017 David Pérez Cabrera <dperezcabrera@gmail.com>.
+ * Copyright 2019 David Pérez Cabrera <dperezcabrera@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,25 +46,6 @@ public enum Utilities {
     public static final String LENGTH_ERR_MSG = "The argument {0} can not be null and its length must be {1}.";
     public static final String SIZE_ERR_MSG = "The argument {0} can not be null and it must to contain {1} elements.";
     
-    private static final Map<Class<?>, Object> DEFAULT_FALUE_PRIMITIVES = initDefaultValuePrimitiveTypes();
-
-    private static Map<Class<?>, Object> initDefaultValuePrimitiveTypes() {
-        Map<Class<?>, Object> result = new HashMap<>();
-        result.put(boolean.class, false);
-        result.put(byte.class, (byte) 0);
-        result.put(char.class, (char) 0);
-        result.put(double.class, 0d);
-        result.put(float.class, 0f);
-        result.put(int.class, 0);
-        result.put(long.class, 0L);
-        result.put(short.class, (short) 0);
-        return Collections.unmodifiableMap(result);
-    }
-
-    public static Object getDefaultValue(Class<?> type) {
-        return DEFAULT_FALUE_PRIMITIVES.get(type);
-    }
-
     public static boolean close(Closeable c) {
         boolean result = false;
         try {

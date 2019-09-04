@@ -1,5 +1,5 @@
 /* 
- * Copyright 2017 David Pérez Cabrera <dperezcabrera@gmail.com>.
+ * Copyright 2019 David Pérez Cabrera <dperezcabrera@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,9 +98,7 @@ public class RemoteIntegrationTests {
                     String winner = candidates.get(counter);
                     scores.put(winner, 1.0);
                     c.setScores(scores);
-                    for (PlayerStrategy p : c.getPlayersConnector().values()) {
-                        p.sendResult(candidates, c.commands, winner);
-                    }
+                    c.getPlayersConnector().values().forEach(p -> p.sendResult(candidates, c.commands, winner));
                 })).build();
     }
 
@@ -122,8 +120,11 @@ public class RemoteIntegrationTests {
                     AUTENTICATION_TIMEOUT, PLAYERS, AuthenticationLoginPassword.getAuthenticationServer(loginPassword),
                     properties);
             if (players.size() >= 1) {
-                GameController<PlayerStrategy> gc = new GameControllerBase(PlayerStrategy.class, stateMachine,
-                        () -> new Model(), properties, new ConnectorAdapterBuilderBase());
+                GameController<PlayerStrategy> gc = new GameControllerBase(
+                        PlayerStrategy.class, 
+                        stateMachine,
+                        Model::new,
+                        properties, new ConnectorAdapterBuilderBase());
                 Map<String, Double> scores = gc.play(players);
                 log.info("scores: \n{}", scores);
             }

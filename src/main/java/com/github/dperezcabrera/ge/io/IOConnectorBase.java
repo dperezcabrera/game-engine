@@ -1,5 +1,5 @@
 /* 
- * Copyright 2017 David Pérez Cabrera <dperezcabrera@gmail.com>.
+ * Copyright 2019 David Pérez Cabrera <dperezcabrera@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ public class IOConnectorBase implements IOConnector {
 
     @NonNull
     private InputStream inStream;
-    
+
     @NonNull
     private OutputStream outStream;
     private boolean closed = false;
@@ -67,8 +67,8 @@ public class IOConnectorBase implements IOConnector {
             }
         }
     }
-    
-    private void readFully(byte[] buffer) throws IOException{
+
+    private void readFully(byte[] buffer) throws IOException {
         for (int i = 0; i < buffer.length; i++) {
             buffer[i] = (byte) inStream.read();
         }

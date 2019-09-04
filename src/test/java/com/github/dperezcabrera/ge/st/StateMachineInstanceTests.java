@@ -1,5 +1,5 @@
 /* 
- * Copyright 2017 David Pérez Cabrera <dperezcabrera@gmail.com>.
+ * Copyright 2019 David Pérez Cabrera <dperezcabrera@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,7 +109,7 @@ public class StateMachineInstanceTests {
             } catch (InterruptedException ex) {
             }
         };
-        StateMachineDefinition<State, Model> stateMachine = StateMachineDefinitionBuilder.<State, Model> create(State.A)
+        stateMachine = StateMachineDefinitionBuilder.<State, Model> create(State.A)
                 .add(state(State.A).trigger(trigger0Mock).transition(State.B)).add(state(State.B).transition(State.C))
                 .add(state(State.C).trigger(trigger2Mock).transition(State.D)).build();
 
@@ -117,7 +117,7 @@ public class StateMachineInstanceTests {
         given(player1Mock.getRandom(0L, 1)).willReturn(0);
         given(player2Mock.getRandom(0L, 2)).willReturn(0);
 
-        StateMachineInstance instance = stateMachine.startInstance(modelMock);
+        instance = stateMachine.startInstance(modelMock);
 
         Executors.newFixedThreadPool(1).submit(() -> instance.execute());
         synchronized (mutex) {

@@ -1,5 +1,5 @@
 /* 
- * Copyright 2017 David Pérez Cabrera <dperezcabrera@gmail.com>.
+ * Copyright 2019 David Pérez Cabrera <dperezcabrera@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@ package com.github.dperezcabrera.ge;
 import com.github.dperezcabrera.ge.annotations.Timeout;
 import com.github.dperezcabrera.ge.st.StateMachineDefinition;
 import com.github.dperezcabrera.ge.st.StateMachineInstance;
-import com.github.dperezcabrera.ge.util.Builder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.Supplier;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ public class GameControllerBaseTests {
     ConnectorAdapterBuilderBase connectorAdapterFactoryMock = mock(ConnectorAdapterBuilderBase.class);
     Properties propertiesMock = mock(Properties.class);
     StateMachineInstance<State, Model> stateMachineInstanceMock = mock(StateMachineInstance.class);
-    Builder<Model> contextFactoryMock = mock(Builder.class);
+    Supplier<Model> contextFactoryMock = mock(Supplier.class);
     PlayerStrategy playerStrategyMock = mock(PlayerStrategy.class);
     Model modelMock = mock(Model.class);
     Map<String, Double> expectResultMock = mock(Map.class);
@@ -61,7 +61,7 @@ public class GameControllerBaseTests {
     public void testPlayNullNamePlayer() {
         given(propertiesMock.getProperty("timeout.getRandom")).willReturn("200");
         given(propertiesMock.containsKey("timeout.getRandom")).willReturn(true);
-        given(contextFactoryMock.build()).willReturn(modelMock);
+        given(contextFactoryMock.get()).willReturn(modelMock);
         given(stateMachineMock.startInstance(modelMock)).willReturn(stateMachineInstanceMock);
         given(stateMachineInstanceMock.execute()).willReturn(modelMock);
         given(modelMock.getScores()).willReturn(expectResultMock);
@@ -76,7 +76,7 @@ public class GameControllerBaseTests {
     public void testPlayNullPlayers() {
         given(propertiesMock.getProperty("timeout.getRandom")).willReturn("200");
         given(propertiesMock.containsKey("timeout.getRandom")).willReturn(true);
-        given(contextFactoryMock.build()).willReturn(modelMock);
+        given(contextFactoryMock.get()).willReturn(modelMock);
         given(stateMachineMock.startInstance(modelMock)).willReturn(stateMachineInstanceMock);
         given(stateMachineInstanceMock.execute()).willReturn(modelMock);
         given(modelMock.getScores()).willReturn(expectResultMock);
@@ -92,7 +92,7 @@ public class GameControllerBaseTests {
     public void testPlayEmptyPlayers() {
         given(propertiesMock.getProperty("timeout.getRandom")).willReturn("200");
         given(propertiesMock.containsKey("timeout.getRandom")).willReturn(true);
-        given(contextFactoryMock.build()).willReturn(modelMock);
+        given(contextFactoryMock.get()).willReturn(modelMock);
         given(stateMachineMock.startInstance(modelMock)).willReturn(stateMachineInstanceMock);
         given(stateMachineInstanceMock.execute()).willReturn(modelMock);
         given(modelMock.getScores()).willReturn(expectResultMock);
@@ -107,7 +107,7 @@ public class GameControllerBaseTests {
     public void testPlayNullPlayer() {
         given(propertiesMock.getProperty("timeout.getRandom")).willReturn("200");
         given(propertiesMock.containsKey("timeout.getRandom")).willReturn(true);
-        given(contextFactoryMock.build()).willReturn(modelMock);
+        given(contextFactoryMock.get()).willReturn(modelMock);
         given(stateMachineMock.startInstance(modelMock)).willReturn(stateMachineInstanceMock);
         given(stateMachineInstanceMock.execute()).willReturn(modelMock);
         given(modelMock.getScores()).willReturn(expectResultMock);
@@ -121,7 +121,7 @@ public class GameControllerBaseTests {
     public void testPlay() {
         given(propertiesMock.getProperty("timeout.getRandom")).willReturn("200");
         given(propertiesMock.containsKey("timeout.getRandom")).willReturn(true);
-        given(contextFactoryMock.build()).willReturn(modelMock);
+        given(contextFactoryMock.get()).willReturn(modelMock);
         given(stateMachineMock.startInstance(modelMock)).willReturn(stateMachineInstanceMock);
         given(stateMachineInstanceMock.execute()).willReturn(modelMock);
         given(modelMock.getScores()).willReturn(expectResultMock);

@@ -1,5 +1,5 @@
 /* 
- * Copyright 2017 David Pérez Cabrera <dperezcabrera@gmail.com>.
+ * Copyright 2019 David Pérez Cabrera <dperezcabrera@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ import com.github.dperezcabrera.ge.util.Utilities;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -28,10 +30,24 @@ import lombok.AllArgsConstructor;
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
 public class ConnectorAdapterBuilderBase implements ConnectorAdapterBuilder {
+    private static final Map<Class<?>, Object> DEFAULT_FALUE_PRIMITIVES = initDefaultValuePrimitiveTypes();
 
     @Override
     public <T> T connector(Class<T> type, MethodInvoker invoker, Map<Method, Long> timeouts) {
         return (T) Proxy.newProxyInstance(type.getClassLoader(), new Class[]{type}, new PlayerConnector(invoker, timeouts));
+    }
+
+    private static Map<Class<?>, Object> initDefaultValuePrimitiveTypes() {
+        Map<Class<?>, Object> result = new HashMap<>();
+        result.put(boolean.class, false);
+        result.put(byte.class, (byte) 0);
+        result.put(char.class, (char) 0);
+        result.put(double.class, 0d);
+        result.put(float.class, 0f);
+        result.put(int.class, 0);
+        result.put(long.class, 0L);
+        result.put(short.class, (short) 0);
+        return Collections.unmodifiableMap(result);
     }
 
     @AllArgsConstructor
@@ -45,7 +61,7 @@ public class ConnectorAdapterBuilderBase implements ConnectorAdapterBuilder {
             Long time = timeouts.get(method);
             if (time == null) {
                 invoker.asyncCall(method, args);
-                return Utilities.getDefaultValue(method.getReturnType());
+                return DEFAULT_FALUE_PRIMITIVES.get(method.getReturnType());
             } else {
                 return invoker.call(method, args);
             }

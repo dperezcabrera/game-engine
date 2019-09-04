@@ -1,5 +1,5 @@
 /* 
- * Copyright 2017 David Pérez Cabrera <dperezcabrera@gmail.com>.
+ * Copyright 2019 David Pérez Cabrera <dperezcabrera@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,12 +44,12 @@ public class GameEngineServer implements AutoCloseable {
 
     public static final String EXIT_COMMAND = "exit";
 
-    private ConnectorAdapterBuilder adapterFactory;
+    private ConnectorAdapterBuilder adapterBuilder;
     private Serializer<MethodCall, byte[]> serializer;
     private List<IOConnectorBase> connectors = new ArrayList<>();
 
-    public GameEngineServer(ConnectorAdapterBuilder adapterFactory, Serializer<MethodCall, byte[]> serializer) {
-        this.adapterFactory = adapterFactory;
+    public GameEngineServer(ConnectorAdapterBuilder adapterBuilder, Serializer<MethodCall, byte[]> serializer) {
+        this.adapterBuilder = adapterBuilder;
         this.serializer = serializer;
     }
 
@@ -72,7 +72,7 @@ public class GameEngineServer implements AutoCloseable {
                 String name = autentication.login(connector, authenticacionTimeOut);
                 if (name != null && !result.containsKey(name)) {
                     IOMethodInvoker mi = new IOMethodInvoker(connector, serializer);
-                    P player = adapterFactory.connector(type, mi, timeouts);
+                    P player = adapterBuilder.connector(type, mi, timeouts);
                     connectors.add(connector);
                     result.put(name, player);
                 } else {
