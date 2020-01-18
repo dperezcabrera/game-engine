@@ -1,5 +1,5 @@
 /* 
- * Copyright 2019 David Pérez Cabrera <dperezcabrera@gmail.com>.
+ * Copyright 2020 David Pérez Cabrera <dperezcabrera@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
